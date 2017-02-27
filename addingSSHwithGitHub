@@ -1,0 +1,39 @@
+ - Generate Keys - ssh-keygen
+	 - Enter a non-null passphrase
+ - Edit Startup File to include the lines below - nano ~/.bashrc
+	SSH_ENV=$HOME/.ssh/environment
+	
+	function start_agent {
+		echo "Initializing new SSH agent..."
+		# spawn ssh-agent
+		/usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+		echo succeeded
+		chmod 600 "${SSH_ENV}"
+		. "${SSH_ENV}" > /dev/null
+		/usr/bin/ssh-add
+		# ~/.ssh/id_rsa
+		}
+	start_agent;
+
+ - Close and repopen putty
+ - Ensure that it prompts you for the passphrase created 
+	 - You can also verify after this with  ssh-add -l 
+ - Add SSH key to Github Account
+	- Enter the following command: cat ~/.ssh/id_rsa.pub 
+	- After logging into GitHub, navigate to Settings>
+		SSH and GPS keys>New SSH Key
+	- Enter in a title
+	- Copy and paste content from the above command into the
+		'key' field
+	- Click Add SSH key
+	- Confirm account password
+ - Return to terminal and enter the following command: 
+	ssh -T git@github.com
+	 - You should receive a message saying that 
+		you've successfully authenticated
+
+**Note: SSH connections will only work with github repositories
+	that have been cloned using the SSH address, not the
+	HTTPS address.
+
+If you have any questions, please message me on Slack
